@@ -1,0 +1,123 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('analysis-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const statusContainer = document.getElementById('status-container');
+    const statusMessage = document.getElementById('status-message');
+    const resultsContainer = document.getElementById('results-container');
+    const resultsList = document.getElementById('results-list');
+
+    let pollingInterval;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Reset UI
+        resultsContainer.classList.add('d-none');
+        statusContainer.classList.remove('d-none');
+        statusMessage.textContent = 'Submitting job...';
+        statusMessage.classList.remove('text-danger');
+        resultsList.innerHTML = '';
+        if (pollingInterval) clearInterval(pollingInterval);
+        
+        // MODIFIED: Logic to get values from a multi-select dropdown
+        const selectElement = document.getElementById('db-instances');
+        const instances = Array.from(selectElement.selectedOptions).map(opt => opt.value);
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+
+        // NEW: Client-side validation
+        if (instances.length === 0) {
+            alert('Please select at least one DB instance.');
+            return;
+        }
+
+        // Disable button and show spinner
+        submitBtn.disabled = true;
+        btnText.textContent = 'Processing...';
+        btnSpinner.classList.remove('d-none');
+
+        try {
+            const response = await fetch('/start-analysis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // The 'instances' payload is now an array
+                body: JSON.stringify({ instances, startDate, endDate }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to start analysis job.');
+            }
+
+            const data = await response.json();
+            pollStatus(data.jobId);
+
+        } catch (error) {
+            showError(error.message);
+        }
+    });
+
+    // The rest of the script (pollStatus, displayResults, etc.) is unchanged.
+    function pollStatus(jobId) { /* ... same as before ... */ }
+    function displayResults(reports) { /* ... same as before ... */ }
+    function showError(message) { /* ... same as before ... */ }
+    function resetButton() { /* ... same as before ... */ }
+
+    // Paste the unchanged functions here
+    function pollStatus(jobId) {
+        pollingInterval = setInterval(async () => {
+            try {
+                const response = await fetch(`/status/${jobId}`);
+                if (!response.ok) {
+                    throw new Error('Could not fetch job status.');
+                }
+                const data = await response.json();
+                statusMessage.textContent = data.status;
+
+                if (data.status === 'Completed' || data.status.startsWith('Error')) {
+                    clearInterval(pollingInterval);
+                    resetButton();
+                    statusContainer.classList.add('d-none');
+                    if (data.status === 'Completed') {
+                        displayResults(data.reports);
+                    } else {
+                        showError(data.status);
+                    }
+                }
+            } catch (error) {
+                clearInterval(pollingInterval);
+                showError(error.message);
+                resetButton();
+            }
+        }, 3000);
+    }
+
+    function displayResults(reports) {
+        if (reports.length === 0) {
+            resultsList.innerHTML = '<li class="list-group-item">No reports were generated. This might mean no slow logs were found in the date range.</li>';
+        } else {
+            reports.forEach(report => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerHTML = `<a href="/report/${report.file}" target="_blank">${report.instance} Report</a>`;
+                resultsList.appendChild(li);
+            });
+        }
+        resultsContainer.classList.remove('d-none');
+    }
+
+    function showError(message) {
+        statusMessage.textContent = message;
+        statusMessage.classList.add('text-danger');
+        statusContainer.classList.remove('d-none');
+        resetButton();
+    }
+
+    function resetButton() {
+        submitBtn.disabled = false;
+        btnText.textContent = 'Start Analysis';
+        btnSpinner.classList.add('d-none');
+    }
+});

@@ -1,0 +1,237 @@
+
+# 820ms user time, 60ms system time, 42.34M rss, 389.86G vsz
+# Current date: Thu Jun 26 13:10:03 2025
+# Hostname: sachins-air
+# Files: slow_logs/aggregated-slow-query-raffall-mysql-primary-14bc0aea-d081-4472-8945-afa2286e3c03.log
+# Overall: 217 total, 9 unique, 0.00 QPS, 0.03x concurrency ______________
+# Time range: 2025-06-22T23:20:19 to 2025-06-24T21:45:29
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time          5249s     10s     34s     24s     32s      7s     21s
+# Lock time          558us     1us     5us     2us     3us       0     1us
+# Rows sent        135.20k       0  26.69k  638.00    0.99   3.55k    0.99
+# Rows examine       1.75G   2.20k  30.86M   8.25M  29.99M  12.78M 298.06k
+# Query size        11.51M     372 365.44k  54.31k 211.82k  92.66k   1.78k
+
+# Profile
+# Rank Query ID                            Response time   Calls R/Call  V
+# ==== =================================== =============== ===== ======= =
+#    1 0x08698730D86F69BB89DB8EF75B9A7827  2290.2186 43.6%   117 19.5745  0.48 SELECT raffall_tickets raffalls users raffall_tickets user_followers host_email_block
+#    2 0xC0AC454D1E630D546C3BC06780DC010D  1587.9495 30.3%    49 32.4071  0.00 UPDATE raffall_tickets
+#    3 0x678BD86DEF745CC7F754A25F73433252  1076.0399 20.5%    37 29.0822  0.01 SELECT raffalls raffall_tickets users raffall_tickets user_followers host_email_block
+#    4 0x19D37D30E619BA85AC80A802C00381D7   116.3798  2.2%     4 29.0950  0.00 SELECT raffalls raffall_tickets users raffall_tickets user_followers host_email_block
+# MISC 0xMISC                               178.7898  3.4%    10 17.8790   0.0 <5 ITEMS>
+
+# Query 1: 0.00 QPS, 0.01x concurrency, ID 0x08698730D86F69BB89DB8EF75B9A7827 at byte 12231469
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.48
+# Time range: 2025-06-22T23:20:31 to 2025-06-24T21:45:29
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         53     117
+# Exec time     43   2290s     10s     25s     20s     21s      3s     19s
+# Lock time     56   314us     1us     5us     2us     3us       0     2us
+# Rows sent      0     117       1       1       1       1       0       1
+# Rows examine   1  19.06M  40.44k 307.46k 166.82k 298.06k 115.18k  72.41k
+# Query size     1 211.82k   1.81k   1.81k   1.81k   1.78k       0   1.78k
+# String:
+# Databases    raffall
+# Hosts        172.40.119.143 (7/5%), 172.40.101.197 (6/5%)... 49 more
+# Users        app_rw_1
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'user_followers'\G
+#    SHOW CREATE TABLE `raffall`.`user_followers`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'host_email_block'\G
+#    SHOW CREATE TABLE `raffall`.`host_email_block`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+select
+                 count(X.user_id) as all_time,
+                    sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 1 month), 1, 0)
+                ) as one_month,
+                sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 3 month), 1, 0)
+                ) as three_months,
+                sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 6 month), 1, 0)
+                ) as six_months,
+                sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 12 month), 1, 0)
+                ) as one_year,
+                sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 24 month), 1, 0)
+                ) as two_years,
+                sum(
+                  if(X.raffall_ticket_date > date_sub(now(), interval 48 month), 1, 0)
+                ) as four_years
+              from
+              (
+              select rt.user_id,u.user_email,rt.raffall_ticket_date, count(rt.user_id) as tickets from raffall_tickets rt
+              left join raffalls r on r.raffall_id = rt.raffall_id
+              left join users u on rt.user_id = u.user_id
+              where
+                r.raffall_status in ("Drawn", "Live")
+                and r.raffall_category_id = '6'
+                and u.subscribed = 1
+                and u.is_deleted = 0
+                and rt.user_id not in
+                  (select rt2.user_id from raffall_tickets rt2 where rt2.raffall_id = '387268' group by rt2.user_id )
+                and rt.user_id not in
+                  (select uf.follower_id from user_followers uf where uf.user_id = '2083818')
+                and rt.user_id not in
+                  (select heb.user_id from host_email_block heb where heb.host_user_id = '2083818')
+
+              group by rt.user_id
+              ) X\G
+
+# Query 2: 0.00 QPS, 0.01x concurrency, ID 0xC0AC454D1E630D546C3BC06780DC010D at byte 6141713
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2025-06-23T01:06:37 to 2025-06-24T21:25:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         22      49
+# Exec time     30   1588s     32s     34s     32s     32s   224ms     32s
+# Lock time     17   100us     1us     3us     2us     2us       0     1us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine  84   1.47G  30.76M  30.86M  30.81M  29.99M       0  29.99M
+# Query size    90  10.42M 217.72k 217.72k 217.72k 217.72k       0 217.72k
+# String:
+# Databases    raffall
+# Hosts        172.40.143.126 (5/10%), 172.40.112.204 (4/8%)... 27 more
+# Users        app_rw_1
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+UPDATE raffall_tickets SET raffall_ticket_is_failed=1 WHERE user_id IN (5378,5381,5382,5391,5392,5400,5404,5406,5407,5409,5410,5415,5418,5420,5423,5427,5428,5430,5442,5446/*... omitted 33135 items ...*/) AND raffall_id=384465\G
+# Converted for EXPLAIN
+# EXPLAIN /*!50100 PARTITIONS*/
+select  raffall_ticket_is_failed=1 from raffall_tickets where  user_id IN (5378,5381,5382,5391,5392,5400,5404,5406,5407,5409,5410,5415,5418,5420,5423,5427,5428,5430,5442,5446/*... omitted 33135 items ...*/) AND raffall_id=384465\G
+
+# Query 3: 0.00 QPS, 0.01x concurrency, ID 0x678BD86DEF745CC7F754A25F73433252 at byte 246601
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.01
+# Time range: 2025-06-22T23:20:19 to 2025-06-24T21:40:56
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         17      37
+# Exec time     20   1076s     29s     30s     29s     29s   395ms     29s
+# Lock time     19   110us     2us     4us     2us     3us       0     2us
+# Rows sent      0      37       1       1       1       1       0       1
+# Rows examine   1  18.69M 488.77k 553.88k 517.38k 535.27k  19.25k 509.78k
+# Query size     0  30.60k     847     847     847     847       0     847
+# String:
+# Databases    raffall
+# Hosts        172.40.122.206 (3/8%), 172.40.130.248 (3/8%)... 26 more
+# Users        app_rw_1
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'user_followers'\G
+#    SHOW CREATE TABLE `raffall`.`user_followers`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'host_email_block'\G
+#    SHOW CREATE TABLE `raffall`.`host_email_block`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+select count(X.user_id) as cnt from
+            (
+              select rt.user_id, count(rt.raffall_ticket_id) from raffalls r
+              left join raffall_tickets rt on r.raffall_id = rt.raffall_id
+              left join users u on rt.user_id = u.user_id
+              where r.user_id = '1894712'
+              and r.raffall_id <> '386145'
+              and u.subscribed = 1
+                and u.is_deleted = 0
+              and rt.user_id not in
+                (select rt2.user_id from raffall_tickets rt2 where rt2.raffall_id = '386145' group by rt2.user_id)
+              and rt.user_id not in (select uf.follower_id from user_followers uf where uf.user_id = '1894712')
+              and rt.user_id not in (select heb.user_id from host_email_block heb where heb.host_user_id = '1894712')
+              group by rt.user_id
+            ) X\G
+
+# Query 4: 0.00 QPS, 0.00x concurrency, ID 0x19D37D30E619BA85AC80A802C00381D7 at byte 1174145
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2025-06-23T13:35:58 to 2025-06-24T14:01:01
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          1       4
+# Exec time      2    116s     29s     29s     29s     29s       0     29s
+# Lock time      2    12us     3us     3us     3us     3us       0     3us
+# Rows sent     78 106.66k  26.63k  26.69k  26.66k  25.99k       0  25.99k
+# Rows examine   1  23.20M   5.79M   5.82M   5.80M   5.71M       0   5.71M
+# Query size     0   3.25k     833     833     833     833       0     833
+# String:
+# Databases    raffall
+# Hosts        172.40.103.69 (1/25%), 172.40.128.138 (1/25%)... 2 more
+# Users        app_rw_1
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'user_followers'\G
+#    SHOW CREATE TABLE `raffall`.`user_followers`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'host_email_block'\G
+#    SHOW CREATE TABLE `raffall`.`host_email_block`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+select u.user_email as email from raffalls r
+              left join raffall_tickets rt on r.raffall_id = rt.raffall_id
+              left join users u on rt.user_id = u.user_id
+              where r.user_id = '1894712'
+              and r.raffall_id <> '386145'
+              and u.subscribed = 1
+                and u.is_deleted = 0
+                and (u.user_password is not null or u.user_facebook_id is not null)
+              and rt.user_id not in
+                (select rt2.user_id from raffall_tickets rt2 where rt2.raffall_id = '386145' group by rt2.user_id)
+              and rt.user_id not in (select uf.follower_id from user_followers uf where uf.user_id = '1894712')
+              and rt.user_id not in (select heb.user_id from host_email_block heb where heb.host_user_id = '1894712')
+              group by rt.user_id\G

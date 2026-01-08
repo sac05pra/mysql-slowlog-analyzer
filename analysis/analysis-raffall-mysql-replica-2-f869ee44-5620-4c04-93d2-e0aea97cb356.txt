@@ -1,0 +1,150 @@
+
+# 100ms user time, 20ms system time, 35.70M rss, 390.13G vsz
+# Current date: Thu Jun 26 13:19:16 2025
+# Hostname: sachins-air
+# Files: slow_logs/aggregated-slow-query-raffall-mysql-replica-2-f869ee44-5620-4c04-93d2-e0aea97cb356.log
+# Overall: 17 total, 4 unique, 0.00 QPS, 0.00x concurrency _______________
+# Time range: 2025-06-22T23:50:14 to 2025-06-23T21:54:35
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time           193s     10s     12s     11s     11s   444ms     11s
+# Lock time           21us     1us     2us     1us     1us       0     1us
+# Rows sent             19       1       2    1.12    1.96    0.31    0.99
+# Rows examine      58.48M   3.05M   4.16M   3.44M   4.06M 503.86k   3.03M
+# Query size         2.56k     129     221  154.18  174.84   24.15  136.99
+
+# Profile
+# Rank Query ID                            Response time  Calls R/Call  V/
+# ==== =================================== ============== ===== ======= ==
+#    1 0xAB3B43A8F1D2F377293ED55D7A9D413E  115.8903 60.0%    10 11.5890  0.00 SELECT users
+#    2 0xD48E511886B148F3E55D89891C4FF945   55.5439 28.7%     5 11.1088  0.01 SELECT raffall_tickets raffalls
+#    3 0x4FEA5E67ACF3631B58FD39D716C233B3   11.8600  6.1%     1 11.8600  0.00 SELECT users
+#    4 0x1B298C1ED3988057F4443A9FFAC739CC   10.0069  5.2%     1 10.0069  0.00 SELECT raffall_tickets raffalls
+
+# Query 1: 0.00 QPS, 0.00x concurrency, ID 0xAB3B43A8F1D2F377293ED55D7A9D413E at byte 19936
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2025-06-23T07:57:31 to 2025-06-23T15:39:39
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         58      10
+# Exec time     59    116s     11s     12s     12s     11s       0     11s
+# Lock time     61    13us     1us     2us     1us     1us       0     1us
+# Rows sent     57      11       1       2    1.10    0.99    0.29    0.99
+# Rows examine  52  30.49M   3.05M   3.05M   3.05M   3.03M       0   3.03M
+# Query size    52   1.35k     132     147  138.60  143.84    4.99  136.99
+# String:
+# Databases    raffall
+# Hosts        172.40.107.4 (2/20%), 172.40.111.160 (2/20%)... 6 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_email) LIKE '%andrew.simpson@ab-renewables.co.uk%') ORDER BY user_id DESC LIMIT 10\G
+
+# Query 2: 0.00 QPS, 0.00x concurrency, ID 0xD48E511886B148F3E55D89891C4FF945 at byte 19936
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.01
+# Time range: 2025-06-23T13:52:54 to 2025-06-23T21:54:35
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         29       5
+# Exec time     28     56s     11s     12s     11s     11s   335ms     11s
+# Lock time     28     6us     1us     2us     1us     1us       0     1us
+# Rows sent     26       5       1       1       1       1       0       1
+# Rows examine  35  20.79M   4.16M   4.16M   4.16M   4.16M       0   4.16M
+# Query size    33     885     177     177     177     177       0     177
+# String:
+# Databases    raffall
+# Hosts        172.40.105.223 (1/20%), 172.40.111.160 (1/20%)... 3 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(*) FROM `raffall_tickets` `t` left join raffalls r on r.raffall_id = t.raffall_id WHERE r.user_id='1894712' and r.rafall_finished=1 and t.raffall_ticket_is_winner=1\G
+
+# Query 3: 0 QPS, 0x concurrency, ID 0x4FEA5E67ACF3631B58FD39D716C233B3 at byte 63762
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: all events occurred at 2025-06-23T14:27:38
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          5       1
+# Exec time      6     12s     12s     12s     12s     12s       0     12s
+# Lock time      4     1us     1us     1us     1us     1us       0     1us
+# Rows sent     10       2       2       2       2       2       0       2
+# Rows examine   5   3.05M   3.05M   3.05M   3.05M   3.05M       0   3.05M
+# Query size     4     129     129     129     129     129       0     129
+# String:
+# Databases    raffall
+# Hosts        172.40.113.210
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_name) LIKE '%raymond jefferies%') ORDER BY user_id DESC LIMIT 10\G
+
+# Query 4: 0 QPS, 0x concurrency, ID 0x1B298C1ED3988057F4443A9FFAC739CC at byte 0
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: all events occurred at 2025-06-22T23:50:14
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          5       1
+# Exec time      5     10s     10s     10s     10s     10s       0     10s
+# Lock time      4     1us     1us     1us     1us     1us       0     1us
+# Rows sent      5       1       1       1       1       1       0       1
+# Rows examine   7   4.16M   4.16M   4.16M   4.16M   4.16M       0   4.16M
+# Query size     8     221     221     221     221     221       0     221
+# String:
+# Databases    raffall
+# Hosts        172.40.135.48
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(r0_.raffall_ticket_id) AS sclr_0 FROM raffall_tickets r0_ LEFT JOIN raffalls r1_ ON r0_.raffall_id = r1_.raffall_id WHERE r1_.user_id = 1894712 AND r1_.rafall_finished = 1 AND r0_.raffall_ticket_is_winner = 1\G

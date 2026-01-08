@@ -1,0 +1,184 @@
+
+# 100ms user time, 60ms system time, 34.53M rss, 389.86G vsz
+# Current date: Thu Jun 26 13:05:13 2025
+# Hostname: sachins-air
+# Files: slow_logs/aggregated-slow-query-raffall-mysql-replica-1-447b8958-0b52-48c0-bff2-c8c42e501a41.log
+# Overall: 69 total, 8 unique, 0.00 QPS, 0.01x concurrency _______________
+# Time range: 2025-06-23T23:54:53 to 2025-06-25T22:04:17
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time          1562s     11s    180s     23s     66s     27s     12s
+# Lock time           86us     1us     3us     1us     1us       0     1us
+# Rows sent        153.56M       0  30.86M   2.23M   5.99M   5.29M    0.99
+# Rows examine     324.16M      15  30.86M   4.70M   5.99M   4.56M   4.06M
+# Query size        15.89k      46   3.52k  235.84  212.52  556.18  136.99
+
+# Profile
+# Rank Query ID                            Response time  Calls R/Call  V/
+# ==== =================================== ============== ===== ======= ==
+#    1 0xE3C753C2F267B2D767A347A2812914DF  945.1685 60.5%    22 42.9622 37.91 SELECT raffall_tickets
+#    2 0xD48E511886B148F3E55D89891C4FF945  216.9501 13.9%    18 12.0528  0.11 SELECT raffall_tickets raffalls
+#    3 0x1B298C1ED3988057F4443A9FFAC739CC  147.7015  9.5%    12 12.3085  0.22 SELECT raffall_tickets raffalls
+#    4 0xAB3B43A8F1D2F377293ED55D7A9D413E  143.2838  9.2%    12 11.9403  0.01 SELECT users
+#    5 0xD5395DF8FFF014AE47C39881EBB1BA66   40.1941  2.6%     1 40.1941  0.00 SELECT raffalls recently_viewed_raffalls users
+# MISC 0xMISC                               68.4317  4.4%     4 17.1079   0.0 <3 ITEMS>
+
+# Query 1: 0.00 QPS, 0.01x concurrency, ID 0xE3C753C2F267B2D767A347A2812914DF at byte 4649
+# Scores: V/M = 37.91
+# Time range: 2025-06-24T00:00:48 to 2025-06-25T00:07:16
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         31      22
+# Exec time     60    945s     12s    180s     43s     88s     40s     26s
+# Lock time     26    23us     1us     2us     1us     1us       0     1us
+# Rows sent     99 153.56M   2.74M  30.86M   6.98M   8.03M   7.51M   4.47M
+# Rows examine  47 153.56M   2.74M  30.86M   6.98M   8.03M   7.51M   4.47M
+# Query size     7   1.18k      46      70      55   62.76    6.89   51.63
+# String:
+# Databases    raffall
+# Hosts        172.40.122.11 (12/54%), 172.40.135.24 (10/45%)
+# Users        backup
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+SELECT /*!40001 SQL_NO_CACHE */ * FROM `raffall_tickets`\G
+# Converted for EXPLAIN
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT /*!40001 SQL_NO_CACHE */ * FROM `raffall_tickets`\G
+
+# Query 2: 0.00 QPS, 0.00x concurrency, ID 0xD48E511886B148F3E55D89891C4FF945 at byte 2323
+# Scores: V/M = 0.11
+# Time range: 2025-06-23T23:54:54 to 2025-06-25T22:04:16
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         26      18
+# Exec time     13    217s     11s     15s     12s     14s      1s     11s
+# Lock time     24    21us     1us     2us     1us     1us       0     1us
+# Rows sent      0      18       1       1       1       1       0       1
+# Rows examine  23  74.84M   4.16M   4.16M   4.16M   4.06M       0   4.06M
+# Query size    19   3.11k     177     177     177     177       0     177
+# String:
+# Databases    raffall
+# Hosts        172.40.124.16 (2/11%), 172.40.106.65 (1/5%)... 15 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(*) FROM `raffall_tickets` `t` left join raffalls r on r.raffall_id = t.raffall_id WHERE r.user_id='1894712' and r.rafall_finished=1 and t.raffall_ticket_is_winner=1\G
+
+# Query 3: 0.00 QPS, 0.00x concurrency, ID 0x1B298C1ED3988057F4443A9FFAC739CC at byte 0
+# Scores: V/M = 0.22
+# Time range: 2025-06-23T23:54:53 to 2025-06-25T22:04:17
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         17      12
+# Exec time      9    148s     11s     17s     12s     13s      2s     11s
+# Lock time     22    19us     1us     3us     1us     1us       0     1us
+# Rows sent      0      12       1       1       1       1       0       1
+# Rows examine  15  49.90M   4.16M   4.16M   4.16M   4.06M       0   4.06M
+# Query size    16   2.59k     221     221     221     221       0     221
+# String:
+# Databases    raffall
+# Hosts        172.40.133.254 (2/16%), 172.40.105.223 (1/8%)... 9 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(r0_.raffall_ticket_id) AS sclr_0 FROM raffall_tickets r0_ LEFT JOIN raffalls r1_ ON r0_.raffall_id = r1_.raffall_id WHERE r1_.user_id = 1894712 AND r1_.rafall_finished = 1 AND r0_.raffall_ticket_is_winner = 1\G
+
+# Query 4: 0.00 QPS, 0.00x concurrency, ID 0xAB3B43A8F1D2F377293ED55D7A9D413E at byte 101417
+# Scores: V/M = 0.01
+# Time range: 2025-06-24T09:00:16 to 2025-06-25T13:59:15
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         17      12
+# Exec time      9    143s     11s     12s     12s     12s   359ms     12s
+# Lock time     18    16us     1us     2us     1us     1us       0     1us
+# Rows sent      0       7       0       1    0.58    0.99    0.49    0.99
+# Rows examine  11  36.65M   3.05M   3.06M   3.05M   3.03M       0   3.03M
+# Query size    10   1.63k     132     167  139.17  136.99    9.31  136.99
+# String:
+# Databases    raffall
+# Hosts        172.40.121.10 (2/16%), 172.40.135.235 (2/16%)... 8 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_email) LIKE '%manolotrigueno@yahoo.com%') ORDER BY user_id DESC LIMIT 10\G
+
+# Query 5: 0 QPS, 0x concurrency, ID 0xD5395DF8FFF014AE47C39881EBB1BA66 at byte 47403
+# Scores: V/M = 0.00
+# Time range: all events occurred at 2025-06-24T20:43:21
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          1       1
+# Exec time      2     40s     40s     40s     40s     40s       0     40s
+# Lock time      1     1us     1us     1us     1us     1us       0     1us
+# Rows sent      0       1       1       1       1       1       0       1
+# Rows examine   0  44.04k  44.04k  44.04k  44.04k  44.04k       0  44.04k
+# Query size    21   3.44k   3.44k   3.44k   3.44k   3.44k       0   3.44k
+# String:
+# Databases    raffall
+# Hosts        172.40.123.160
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'recently_viewed_raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`recently_viewed_raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT COUNT(*) AS dctrn_count FROM (SELECT r0_.raffall_id AS raffall_id_0, r0_.raffall_title AS raffall_title_1, r0_.raffall_description AS raffall_description_2, r0_.raffall_country AS raffall_country_3, r0_.raffall_accepted_by_winner AS raffall_accepted_by_winner_4, r0_.raffall_tickets_count AS raffall_tickets_count_5, r0_.raffall_ticket_price AS raffall_ticket_price_6, r0_.raffall_end_date AS raffall_end_date_7, r0_.raffall_timezone AS raffall_timezone_8, r0_.raffall_created AS raffall_created_9, r0_.raffall_updated AS raffall_updated_10, r0_.rafall_finished AS rafall_finished_11, r0_.collection AS collection_12, r0_.collection_postcode AS collection_postcode_13, r0_.raffall_published AS raffall_published_14, r0_.published_datetime AS published_datetime_15, r0_.raffall_autorelist AS raffall_autorelist_16, r0_.raffall_ends_all_sold AS raffall_ends_all_sold_17, r0_.raffall_is_bonus AS raffall_is_bonus_18, r0_.raffall_bonus_amount AS raffall_bonus_amount_19, r0_.charity_percentage AS charity_percentage_20, r0_.email_personal_message AS email_personal_message_21, r0_.charity_debit AS charity_debit_22, r0_.game_type AS game_type_23, r0_.raffall_is_free_entry AS raffall_is_free_entry_24, r0_.expires_in AS expires_in_25, r0_.first_prize_amount AS first_prize_amount_26, r0_.first_prize_winners AS first_prize_winners_27, r0_.second_prize_amount AS second_prize_amount_28, r0_.second_prize_winners AS second_prize_winners_29, r0_.third_prize_amount AS third_prize_amount_30, r0_.third_prize_winners AS third_prize_winners_31, r0_.topic_arn AS topic_arn_32, r0_.raffall_publish_type AS raffall_publish_type_33, r0_.mailchimp_list AS mailchimp_list_34, r0_.raffall_collection AS raffall_collection_35, r0_.raffall_prize_type AS raffall_prize_type_36, r0_.raffall_video_path AS raffall_video_path_37, r0_.raffall_promo_image AS raffall_promo_image_38, r0_.is_event AS is_event_39, r0_.featured_end_datetime AS featured_end_datetime_40, r0_.raffall_reported AS raffall_reported_41, r0_.raffall_url AS raffall_url_42, r0_.hoster_username AS hoster_username_43, r0_.revoke_date AS revoke_date_44, r0_.revoke_reason AS revoke_reason_45, r0_.draw_status AS draw_status_46, r0_.draw_datetime AS draw_datetime_47, r0_.mailgun_list AS mailgun_list_48, r0_.fraud_status AS fraud_status_49, r0_.is_affiliate AS is_affiliate_50, r0_.commission_rate AS commission_rate_51, r0_.raffall_status AS raffall_status_52, r0_.is_enable_specific_affiliate_partner AS is_enable_specific_affiliate_partner_53, r0_.raffall_title_sanitized AS raffall_title_sanitized_54, r0_.raffall_description_sanitized AS raffall_description_sanitized_55, r0_.minimum_tickets AS minimum_tickets_56, r0_.notification_before_draw_sent AS notification_before_draw_sent_57, r0_.raffall_start_date AS raffall_start_date_58, r0_.language AS language_59, r0_.other_languages AS other_languages_60, r0_.has_payment AS has_payment_61, r0_.winner_prize_type AS winner_prize_type_62, r0_.winner_prize_reason AS winner_prize_reason_63, r0_.raffall_host_prize_select_date AS raffall_host_prize_select_date_64, r1_.created_at AS created_at_65 FROM raffalls r0_ INNER JOIN recently_viewed_raffalls r1_ ON r0_.raffall_id = r1_.raffall_id INNER JOIN users u2_ ON r1_.user_id = u2_.user_id WHERE r0_.raffall_reported = 0 AND r0_.raffall_published = 1 AND r0_.raffall_is_free_entry = 0 AND (r0_.raffall_tickets_count >= 200 OR (r0_.raffall_tickets_count = -1 OR r0_.raffall_tickets_count = 1000000000)) GROUP BY r0_.raffall_id ORDER BY created_at_65 DESC) dctrn_table\G

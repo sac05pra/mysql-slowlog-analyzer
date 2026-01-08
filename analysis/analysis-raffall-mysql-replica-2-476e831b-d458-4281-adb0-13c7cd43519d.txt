@@ -1,0 +1,320 @@
+
+# 90ms user time, 60ms system time, 34.64M rss, 389.87G vsz
+# Current date: Fri Jun 27 14:24:54 2025
+# Hostname: sachins-air
+# Files: slow_logs/aggregated-slow-query-raffall-mysql-replica-2-476e831b-d458-4281-adb0-13c7cd43519d.log
+# Overall: 25 total, 6 unique, 0.00 QPS, 0.01x concurrency _______________
+# Time range: 2025-06-25T04:00:42 to 2025-06-25T16:03:19
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time           352s     11s     22s     14s     21s      4s     12s
+# Lock time           43us     1us     4us     1us     2us       0     1us
+# Rows sent          2.36k       0   1.15k   96.76   19.46  317.38    0.99
+# Rows examine     389.87M   3.06M  78.39M  15.59M  75.78M  26.48M   4.06M
+# Query size        13.30k     125   2.46k  544.72   2.38k  833.62  174.84
+
+# Profile
+# Rank Query ID                            Response time Calls R/Call  V/M
+# ==== =================================== ============= ===== ======= ===
+#    1 0xAB3B43A8F1D2F377293ED55D7A9D413E  95.3204 27.1%     8 11.9151  0.01 SELECT users
+#    2 0x1B298C1ED3988057F4443A9FFAC739CC  80.3850 22.8%     6 13.3975  0.31 SELECT raffall_tickets raffalls
+#    3 0xD48E511886B148F3E55D89891C4FF945  66.7488 19.0%     5 13.3498  0.56 SELECT raffall_tickets raffalls
+#    4 0x7CCF2A7C51E18EDD91AD9B8C6FF8042E  43.2064 12.3%     2 21.6032  0.00 SELECT raffall_tickets affiliate_ticket_purchased affiliate_commission_request raffalls users withdrawal_bank_details currencies users currencies
+#    5 0xD8BEEB4E887250ED8176173ED44710DC  42.8783 12.2%     2 21.4391  0.00 SELECT raffall_tickets affiliate_ticket_purchased affiliate_commission_request raffalls users withdrawal_bank_details currencies users currencies
+#    6 0x4FEA5E67ACF3631B58FD39D716C233B3  23.3412  6.6%     2 11.6706  0.00 SELECT users
+
+# Query 1: 0.00 QPS, 0.01x concurrency, ID 0xAB3B43A8F1D2F377293ED55D7A9D413E at byte 8489
+# Scores: V/M = 0.01
+# Time range: 2025-06-25T08:10:46 to 2025-06-25T11:04:44
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         32       8
+# Exec time     27     95s     11s     12s     12s     12s   284ms     12s
+# Lock time     25    11us     1us     2us     1us     1us       0     1us
+# Rows sent      0       6       0       1    0.75    0.99    0.43    0.99
+# Rows examine   6  24.45M   3.06M   3.06M   3.06M   3.03M       0   3.03M
+# Query size     7   1.05k     126     138  134.75  136.99    4.46  136.99
+# String:
+# Databases    raffall
+# Hosts        172.40.112.204 (2/25%), 172.40.116.1 (2/25%)... 3 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_email) LIKE '%leosmel roque%') ORDER BY user_id DESC LIMIT 10\G
+
+# Query 2: 0.00 QPS, 0.00x concurrency, ID 0x1B298C1ED3988057F4443A9FFAC739CC at byte 37240
+# Scores: V/M = 0.31
+# Time range: 2025-06-25T04:00:42 to 2025-06-25T16:03:19
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         24       6
+# Exec time     22     80s     11s     16s     13s     15s      2s     15s
+# Lock time     20     9us     1us     2us     1us     1us       0     1us
+# Rows sent      0       6       1       1       1       1       0       1
+# Rows examine   6  24.95M   4.16M   4.16M   4.16M   4.06M       0   4.06M
+# Query size     9   1.29k     221     221     221     221       0     221
+# String:
+# Databases    raffall
+# Hosts        172.40.105.228 (1/16%), 172.40.108.172 (1/16%)... 4 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(r0_.raffall_ticket_id) AS sclr_0 FROM raffall_tickets r0_ LEFT JOIN raffalls r1_ ON r0_.raffall_id = r1_.raffall_id WHERE r1_.user_id = 1894712 AND r1_.rafall_finished = 1 AND r0_.raffall_ticket_is_winner = 1\G
+
+# Query 3: 0.00 QPS, 0.00x concurrency, ID 0xD48E511886B148F3E55D89891C4FF945 at byte 67237
+# Scores: V/M = 0.56
+# Time range: 2025-06-25T06:01:18 to 2025-06-25T14:03:01
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         20       5
+# Exec time     18     67s     11s     17s     13s     17s      3s     11s
+# Lock time     16     7us     1us     2us     1us     1us       0     1us
+# Rows sent      0       5       1       1       1       1       0       1
+# Rows examine   5  20.79M   4.16M   4.16M   4.16M   4.16M       0   4.16M
+# Query size     6     885     177     177     177     177       0     177
+# String:
+# Databases    raffall
+# Hosts        172.40.115.192 (1/20%), 172.40.121.134 (1/20%)... 3 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(*) FROM `raffall_tickets` `t` left join raffalls r on r.raffall_id = t.raffall_id WHERE r.user_id='1894712' and r.rafall_finished=1 and t.raffall_ticket_is_winner=1\G
+
+# Query 4: 0.00 QPS, 0.05x concurrency, ID 0x7CCF2A7C51E18EDD91AD9B8C6FF8042E at byte 19973
+# Scores: V/M = 0.00
+# Time range: 2025-06-25T10:20:52 to 2025-06-25T10:34:14
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          8       2
+# Exec time     12     43s     22s     22s     22s     22s    14ms     22s
+# Lock time     13     6us     3us     3us     3us     3us       0     3us
+# Rows sent      1      40      20      20      20      20       0      20
+# Rows examine  40 156.79M  78.39M  78.39M  78.39M  78.39M       0  78.39M
+# Query size    37   4.93k   2.46k   2.46k   2.46k   2.46k       0   2.46k
+# String:
+# Databases    raffall
+# Hosts        172.40.108.172 (1/50%), 172.40.137.179 (1/50%)
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'affiliate_ticket_purchased'\G
+#    SHOW CREATE TABLE `raffall`.`affiliate_ticket_purchased`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'affiliate_commission_request'\G
+#    SHOW CREATE TABLE `raffall`.`affiliate_commission_request`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'withdrawal_bank_details'\G
+#    SHOW CREATE TABLE `raffall`.`withdrawal_bank_details`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'currencies'\G
+#    SHOW CREATE TABLE `raffall`.`currencies`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT 
+            t.affiliate_commission_request_id as affiliate_commission_request_id,
+            t.raffall_id as raffall_id,
+            r.raffall_title as raffall_title,
+            r.raffall_end_date as raffall_end_date,
+            (SELECT COUNT(DISTINCT user_id) FROM raffall_tickets rt WHERE rt.raffall_id = t.raffall_id)
+                as num_entrants,
+            t.user_id as user_id,
+            u.user_name as user_name,
+            u.user_email as user_email,
+            (select count(DISTINCT atp.user_id)
+            from affiliate_ticket_purchased atp
+            where atp.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as affiliate_entrants,
+            (select SUM(atpa.ticket_count)
+            from affiliate_ticket_purchased atpa
+            where atpa.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as affiliate_tickets_sold,
+            (select (SUM(atpb.commission_rate * atpb.ticket_count) / SUM(atpb.ticket_count)) * 100
+            from affiliate_ticket_purchased atpb
+            where atpb.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as avg_affiliate_commission,
+            t.request_date as withdrawal_requested,
+            t.amount as amount,
+            t.request_status as request_status,
+            cur.currency_sign,
+            wcur.currency_name as account_currency_name,
+            wcur.currency_sign as account_currency_sign,
+            wbd.account_currency_id,
+            wbd.type as bank_type,
+            wbd.account as account,
+            wbd.bank_account as bank_account,
+            wbd.sort_code as sort_code,
+            wbd.email as email,
+            wbd.pay_date as pay_date,
+            wbd.account_type as account_type,
+            u2.user_name as host_user_pay_name
+         FROM `affiliate_commission_request` `t` 
+            LEFT JOIN raffalls r on t.raffall_id = r.raffall_id
+            LEFT JOIN users u on t.user_id = u.user_id
+            INNER JOIN withdrawal_bank_details wbd on wbd.withdrawal_bank_details_id = t.withdrawal_bank_details_id
+            LEFT JOIN currencies cur on cur.currency_id = r.raffall_currency
+            LEFT JOIN users u2 on wbd.host_pay_user_id = u2.user_id
+            LEFT JOIN currencies wcur on wcur.currency_id = wbd.account_currency_id
+         WHERE t.affiliate_commission_request_id IS NOT NULL GROUP BY t.affiliate_commission_request_id, r.raffall_id ORDER BY t.affiliate_commission_request_id asc LIMIT 20\G
+
+# Query 5: 0.00 QPS, 0.05x concurrency, ID 0xD8BEEB4E887250ED8176173ED44710DC at byte 11085
+# Scores: V/M = 0.00
+# Time range: 2025-06-25T10:20:30 to 2025-06-25T10:33:52
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          8       2
+# Exec time     12     43s     21s     22s     21s     22s   104ms     21s
+# Lock time     16     7us     3us     4us     3us     4us       0     3us
+# Rows sent     97   2.30k   1.15k   1.15k   1.15k   1.15k       0   1.15k
+# Rows examine  40 156.79M  78.39M  78.39M  78.39M  78.39M       0  78.39M
+# Query size    36   4.91k   2.46k   2.46k   2.46k   2.46k       0   2.46k
+# String:
+# Databases    raffall
+# Hosts        172.40.108.172 (1/50%), 172.40.137.179 (1/50%)
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'affiliate_ticket_purchased'\G
+#    SHOW CREATE TABLE `raffall`.`affiliate_ticket_purchased`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'affiliate_commission_request'\G
+#    SHOW CREATE TABLE `raffall`.`affiliate_commission_request`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'withdrawal_bank_details'\G
+#    SHOW CREATE TABLE `raffall`.`withdrawal_bank_details`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'currencies'\G
+#    SHOW CREATE TABLE `raffall`.`currencies`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT 
+            t.affiliate_commission_request_id as affiliate_commission_request_id,
+            t.raffall_id as raffall_id,
+            r.raffall_title as raffall_title,
+            r.raffall_end_date as raffall_end_date,
+            (SELECT COUNT(DISTINCT user_id) FROM raffall_tickets rt WHERE rt.raffall_id = t.raffall_id)
+                as num_entrants,
+            t.user_id as user_id,
+            u.user_name as user_name,
+            u.user_email as user_email,
+            (select count(DISTINCT atp.user_id)
+            from affiliate_ticket_purchased atp
+            where atp.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as affiliate_entrants,
+            (select SUM(atpa.ticket_count)
+            from affiliate_ticket_purchased atpa
+            where atpa.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as affiliate_tickets_sold,
+            (select (SUM(atpb.commission_rate * atpb.ticket_count) / SUM(atpb.ticket_count)) * 100
+            from affiliate_ticket_purchased atpb
+            where atpb.affiliate_commission_request_id = t.affiliate_commission_request_id)
+            as avg_affiliate_commission,
+            t.request_date as withdrawal_requested,
+            t.amount as amount,
+            t.request_status as request_status,
+            cur.currency_sign,
+            wcur.currency_name as account_currency_name,
+            wcur.currency_sign as account_currency_sign,
+            wbd.account_currency_id,
+            wbd.type as bank_type,
+            wbd.account as account,
+            wbd.bank_account as bank_account,
+            wbd.sort_code as sort_code,
+            wbd.email as email,
+            wbd.pay_date as pay_date,
+            wbd.account_type as account_type,
+            u2.user_name as host_user_pay_name
+         FROM `affiliate_commission_request` `t` 
+            LEFT JOIN raffalls r on t.raffall_id = r.raffall_id
+            LEFT JOIN users u on t.user_id = u.user_id
+            INNER JOIN withdrawal_bank_details wbd on wbd.withdrawal_bank_details_id = t.withdrawal_bank_details_id
+            LEFT JOIN currencies cur on cur.currency_id = r.raffall_currency
+            LEFT JOIN users u2 on wbd.host_pay_user_id = u2.user_id
+            LEFT JOIN currencies wcur on wcur.currency_id = wbd.account_currency_id
+         WHERE t.affiliate_commission_request_id IS NOT NULL GROUP BY t.affiliate_commission_request_id, r.raffall_id ORDER BY t.affiliate_commission_request_id asc\G
+
+# Query 6: 0.00 QPS, 0.02x concurrency, ID 0x4FEA5E67ACF3631B58FD39D716C233B3 at byte 0
+# Scores: V/M = 0.00
+# Time range: 2025-06-25T08:37:48 to 2025-06-25T09:01:04
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          8       2
+# Exec time      6     23s     12s     12s     12s     12s   192ms     12s
+# Lock time      6     3us     1us     2us     1us     2us       0     1us
+# Rows sent      0       2       0       2       1       2    1.41       1
+# Rows examine   1   6.11M   3.06M   3.06M   3.06M   3.06M   17.68   3.06M
+# Query size     1     251     125     126  125.50     126    0.71  125.50
+# String:
+# Databases    raffall
+# Hosts        172.40.109.154 (1/50%), 172.40.132.215 (1/50%)
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_name) LIKE '%peter veldman%') ORDER BY user_id DESC LIMIT 10\G

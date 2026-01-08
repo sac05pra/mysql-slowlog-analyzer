@@ -1,0 +1,19 @@
+# .dockerignore
+
+# Exclude the local virtual environment
+venv/
+
+# Exclude Python's cache files
+__pycache__/
+*.pyc
+
+# Exclude temporary log/analysis directories created at runtime
+slow_logs/
+analysis/
+
+# Exclude secrets and local git history
+.env
+.git
+.gitignore
+.vscode/
+.DS_Store

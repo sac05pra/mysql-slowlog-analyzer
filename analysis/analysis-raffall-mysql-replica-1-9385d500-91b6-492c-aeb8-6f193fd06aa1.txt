@@ -1,0 +1,223 @@
+
+# 100ms user time, 60ms system time, 34.55M rss, 389.86G vsz
+# Current date: Mon Jun 30 11:59:10 2025
+# Hostname: sachins-air
+# Files: slow_logs/aggregated-slow-query-raffall-mysql-replica-1-9385d500-91b6-492c-aeb8-6f193fd06aa1.log
+# Overall: 48 total, 7 unique, 0.00 QPS, 0.01x concurrency _______________
+# Time range: 2025-06-27T00:00:47 to 2025-06-27T20:13:22
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time          1078s     10s    171s     22s     32s     26s     13s
+# Lock time           67us       0     3us     1us     1us       0     1us
+# Rows sent         82.10M       0  30.97M   1.71M   5.71M   4.59M    0.99
+# Rows examine     202.23M      10  30.97M   4.21M   5.71M   4.04M   4.06M
+# Query size        38.34k      46   8.13k  817.96   7.68k   2.14k  174.84
+
+# Profile
+# Rank Query ID                            Response time  Calls R/Call  V/
+# ==== =================================== ============== ===== ======= ==
+#    1 0xE3C753C2F267B2D767A347A2812914DF  556.9631 51.7%    13 42.8433 44.52 SELECT raffall_tickets
+#    2 0xD48E511886B148F3E55D89891C4FF945  268.6914 24.9%    18 14.9273  1.72 SELECT raffall_tickets raffalls
+#    3 0x1B298C1ED3988057F4443A9FFAC739CC   68.2324  6.3%     5 13.6465  1.30 SELECT raffall_tickets raffalls
+#    4 0xAB3B43A8F1D2F377293ED55D7A9D413E   59.4097  5.5%     5 11.8819  0.01 SELECT users
+#    5 0xCFBE5A718546844A6F037E5CE0581C55   44.3469  4.1%     2 22.1734  0.00 SELECT raffalls raffall_categories raffall_tickets users
+#    6 0x5C20FD3CE117841217C064A516E2B6B5   44.2623  4.1%     2 22.1312  0.00 SELECT raffalls raffall_categories raffall_tickets users
+# MISC 0xMISC                               35.8213  3.3%     3 11.9404   0.0 <1 ITEMS>
+
+# Query 1: 0.02 QPS, 0.99x concurrency, ID 0xE3C753C2F267B2D767A347A2812914DF at byte 3823
+# Scores: V/M = 44.52
+# Time range: 2025-06-27T00:00:47 to 2025-06-27T00:10:07
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         27      13
+# Exec time     51    557s     10s    171s     43s     88s     44s     28s
+# Lock time     17    12us       0     1us       0     1us       0     1us
+# Rows sent     99  82.10M   1.31M  30.97M   6.32M   8.03M   7.09M   4.47M
+# Rows examine  40  82.10M   1.31M  30.97M   6.32M   8.03M   7.09M   4.47M
+# Query size     1     726      46      70   55.85   62.76    7.08   51.63
+# String:
+# Databases    raffall
+# Hosts        172.40.105.16
+# Users        backup
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+SELECT /*!40001 SQL_NO_CACHE */ * FROM `raffall_tickets`\G
+# Converted for EXPLAIN
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT /*!40001 SQL_NO_CACHE */ * FROM `raffall_tickets`\G
+
+# Query 2: 0.00 QPS, 0.00x concurrency, ID 0xD48E511886B148F3E55D89891C4FF945 at byte 85852
+# Scores: V/M = 1.72
+# Time range: 2025-06-27T02:09:43 to 2025-06-27T20:13:22
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         37      18
+# Exec time     24    269s     10s     25s     15s     24s      5s     11s
+# Lock time     37    25us     1us     2us     1us     1us       0     1us
+# Rows sent      0      18       1       1       1       1       0       1
+# Rows examine  37  74.84M   4.16M   4.16M   4.16M   4.16M       0   4.16M
+# Query size     8   3.11k     177     177     177     177       0     177
+# String:
+# Databases    raffall
+# Hosts        172.40.131.165 (3/16%), 172.40.105.228 (2/11%)... 11 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(*) FROM `raffall_tickets` `t` left join raffalls r on r.raffall_id = t.raffall_id WHERE r.user_id='1894712' and r.rafall_finished=1 and t.raffall_ticket_is_winner=1\G
+
+# Query 3: 0.00 QPS, 0.00x concurrency, ID 0x1B298C1ED3988057F4443A9FFAC739CC at byte 87005
+# Scores: V/M = 1.30
+# Time range: 2025-06-27T00:09:12 to 2025-06-27T20:13:17
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         10       5
+# Exec time      6     68s     10s     21s     14s     21s      4s     11s
+# Lock time     13     9us     1us     2us     1us     1us       0     1us
+# Rows sent      0       5       1       1       1       1       0       1
+# Rows examine  10  20.79M   4.16M   4.16M   4.16M   4.16M       0   4.16M
+# Query size     2   1.08k     221     221     221     221       0     221
+# String:
+# Databases    raffall
+# Hosts        172.40.105.228 (1/20%), 172.40.121.134 (1/20%)... 3 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT count(r0_.raffall_ticket_id) AS sclr_0 FROM raffall_tickets r0_ LEFT JOIN raffalls r1_ ON r0_.raffall_id = r1_.raffall_id WHERE r1_.user_id = 1894712 AND r1_.rafall_finished = 1 AND r0_.raffall_ticket_is_winner = 1\G
+
+# Query 4: 0.00 QPS, 0.00x concurrency, ID 0xAB3B43A8F1D2F377293ED55D7A9D413E at byte 68510
+# Scores: V/M = 0.01
+# Time range: 2025-06-27T08:44:19 to 2025-06-27T15:36:35
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         10       5
+# Exec time      5     59s     12s     12s     12s     12s   278ms     11s
+# Lock time     11     8us     1us     2us     1us     1us       0     1us
+# Rows sent      0       4       0       1    0.80    0.99    0.40    0.99
+# Rows examine   7  15.32M   3.06M   3.06M   3.06M   3.03M       0   3.03M
+# Query size     1     709     132     148  141.80  143.84    5.02  136.99
+# String:
+# Databases    raffall
+# Hosts        172.40.117.86 (1/20%), 172.40.131.165 (1/20%)... 3 more
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM `users` `t` WHERE (is_deleted = 0) AND (lower(user_email) LIKE '%cjmonaco3@gmail.com%') ORDER BY user_id DESC LIMIT 10\G
+
+# Query 5: 0.02 QPS, 0.49x concurrency, ID 0xCFBE5A718546844A6F037E5CE0581C55 at byte 44873
+# Scores: V/M = 0.00
+# Time range: 2025-06-27T12:53:56 to 2025-06-27T12:55:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          4       2
+# Exec time      4     44s     22s     22s     22s     22s   167ms     22s
+# Lock time      7     5us     2us     3us     2us     3us       0     2us
+# Rows sent      0       2       1       1       1       1       0       1
+# Rows examine   0     528     264     264     264     264       0     264
+# Query size    42  16.11k   8.06k   8.06k   8.06k   8.06k       0   8.06k
+# String:
+# Databases    raffall
+# Hosts        172.40.126.150 (1/50%), 172.40.142.220 (1/50%)
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_categories'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_categories`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT COUNT(*) AS dctrn_count FROM (SELECT COUNT(r0_.raffall_ticket_id) * r1_.raffall_ticket_price AS sclr_0, r1_.raffall_id AS raffall_id_1, r1_.raffall_title AS raffall_title_2, r1_.raffall_description AS raffall_description_3, r1_.raffall_country AS raffall_country_4, r1_.raffall_accepted_by_winner AS raffall_accepted_by_winner_5, r1_.raffall_tickets_count AS raffall_tickets_count_6, r1_.raffall_ticket_price AS raffall_ticket_price_7, r1_.raffall_end_date AS raffall_end_date_8, r1_.raffall_timezone AS raffall_timezone_9, r1_.raffall_created AS raffall_created_10, r1_.raffall_updated AS raffall_updated_11, r1_.rafall_finished AS rafall_finished_12, r1_.collection AS collection_13, r1_.collection_postcode AS collection_postcode_14, r1_.raffall_published AS raffall_published_15, r1_.published_datetime AS published_datetime_16, r1_.raffall_autorelist AS raffall_autorelist_17, r1_.raffall_ends_all_sold AS raffall_ends_all_sold_18, r1_.raffall_is_bonus AS raffall_is_bonus_19, r1_.raffall_bonus_amount AS raffall_bonus_amount_20, r1_.charity_percentage AS charity_percentage_21, r1_.email_personal_message AS email_personal_message_22, r1_.charity_debit AS charity_debit_23, r1_.game_type AS game_type_24, r1_.raffall_is_free_entry AS raffall_is_free_entry_25, r1_.expires_in AS expires_in_26, r1_.first_prize_amount AS first_prize_amount_27, r1_.first_prize_winners AS first_prize_winners_28, r1_.second_prize_amount AS second_prize_amount_29, r1_.second_prize_winners AS second_prize_winners_30, r1_.third_prize_amount AS third_prize_amount_31, r1_.third_prize_winners AS third_prize_winners_32, r1_.topic_arn AS topic_arn_33, r1_.raffall_publish_type AS raffall_publish_type_34, r1_.mailchimp_list AS mailchimp_list_35, r1_.raffall_collection AS raffall_collection_36, r1_.raffall_prize_type AS raffall_prize_type_37, r1_.raffall_video_path AS raffall_video_path_38, r1_.raffall_promo_image AS raffall_promo_image_39, r1_.is_event AS is_event_40, r1_.featured_end_datetime AS featured_end_datetime_41, r1_.raffall_reported AS raffall_reported_42, r1_.raffall_url AS raffall_url_43, r1_.hoster_username AS hoster_username_44, r1_.revoke_date AS revoke_date_45, r1_.revoke_reason AS revoke_reason_46, r1_.draw_status AS draw_status_47, r1_.draw_datetime AS draw_datetime_48, r1_.mailgun_list AS mailgun_list_49, r1_.fraud_status AS fraud_status_50, r1_.is_affiliate AS is_affiliate_51, r1_.commission_rate AS commission_rate_52, r1_.raffall_status AS raffall_status_53, r1_.is_enable_specific_affiliate_partner AS is_enable_specific_affiliate_partner_54, r1_.raffall_title_sanitized AS raffall_title_sanitized_55, r1_.raffall_description_sanitized AS raffall_description_sanitized_56, r1_.minimum_tickets AS minimum_tickets_57, r1_.notification_before_draw_sent AS notification_before_draw_sent_58, r1_.raffall_start_date AS raffall_start_date_59, r1_.language AS language_60, r1_.other_languages AS other_languages_61, r1_.has_payment AS has_payment_62, r1_.winner_prize_type AS winner_prize_type_63, r1_.winner_prize_reason AS winner_prize_reason_64, r1_.raffall_host_prize_select_date AS raffall_host_prize_select_date_65, r0_.raffall_ticket_id AS raffall_ticket_id_66, r0_.raffall_ticket_title AS raffall_ticket_title_67, r0_.raffall_ticket_is_winner AS raffall_ticket_is_winner_68, r0_.raffall_ticket_is_failed AS raffall_ticket_is_failed_69, r0_.raffall_ticket_is_returned AS raffall_ticket_is_returned_70, r0_.raffall_ticket_is_accepted AS raffall_ticket_is_accepted_71, r0_.raffall_win_balance_type AS raffall_win_balance_type_72, r0_.raffall_ticket_date AS raffall_ticket_date_73, r0_.raffall_ticket_share_via AS raffall_ticket_share_via_74, r0_.raffall_ticket_amount AS raffall_ticket_amount_75, r0_.raffall_ticket_price AS raffall_ticket_price_76, r0_.raffall_ticket_win_place AS raffall_ticket_win_place_77, r0_.raffall_ticket_is_offerwall AS raffall_ticket_is_offerwall_78, r0_.raffall_ticket_dispute_date AS raffall_ticket_dispute_date_79, r0_.raffall_ticket_confirm_dispute_date AS raffall_ticket_confirm_dispute_date_80, r0_.raffall_ticket_reset_to_pending_date AS raffall_ticket_reset_to_pending_date_81, r0_.is_hidden AS is_hidden_82, r0_.preroll_winner AS preroll_winner_83, r0_.ticket_type AS ticket_type_84, r0_.affiliate_ticket_purchased_id AS affiliate_ticket_purchased_id_85, u2_.user_id AS user_id_86, u2_.user_email AS user_email_87, u2_.user_new_email AS user_new_email_88, u2_.user_password AS user_password_89, u2_.user_name AS user_name_90, u2_.user_avatar AS user_avatar_91, u2_.user_facebook_id AS user_facebook_id_92, u2_.user_wallet AS user_wallet_93, u2_.user_winnings AS user_winnings_94, u2_.user_winnings_pending AS user_winnings_pending_95, u2_.user_winnings_request AS user_winnings_request_96, u2_.user_email_verified AS user_email_verified_97, u2_.user_created AS user_created_98, u2_.user_updated AS user_updated_99, u2_.is_admin AS is_admin_100, u2_.is_hoster AS is_hoster_101, u2_.user_password_recovered AS user_password_recovered_102, u2_.user_country AS user_country_103, u2_.user_city AS user_city_104, u2_.user_phone AS user_phone_105, u2_.average_rating AS average_rating_106, u2_.total_rating AS total_rating_107, u2_.rates AS rates_108, u2_.finished_raffalls AS finished_raffalls_109, u2_.last_bonus_share AS last_bonus_share_110, u2_.ref_code AS ref_code_111, u2_.refferal_user_id AS refferal_user_id_112, u2_.is_first_login AS is_first_login_113, u2_.refferal_bonuses AS refferal_bonuses_114, u2_.received_from_tapjoj AS received_from_tapjoj_115, u2_.ads_left AS ads_left_116, u2_.ad_last_viewed_date AS ad_last_viewed_date_117, u2_.user_fb_token AS user_fb_token_118, u2_.user_phone_verified AS user_phone_verified_119, u2_.refferal_bonuses_comission AS refferal_bonuses_comission_120, u2_.user_phone_country AS user_phone_country_121, u2_.user_hoster_verified AS user_hoster_verified_122, u2_.user_hoster_details AS user_hoster_details_123, u2_.user_hoster_website AS user_hoster_website_124, u2_.videoads_left AS videoads_left_125, u2_.videoad_last_viewed_date AS videoad_last_viewed_date_126, u2_.free_draw_ads AS free_draw_ads_127, u2_.free_draw_last_viewed_date AS free_draw_last_viewed_date_128, u2_.free_draw_offerwall_completed_date AS free_draw_offerwall_completed_date_129, u2_.raffalls_synced AS raffalls_synced_130, u2_.user_relogged AS user_relogged_131, u2_.refferal_type AS refferal_type_132, u2_.refferal_bonuses_free_draw AS refferal_bonuses_free_draw_133, u2_.last_payment_id AS last_payment_id_134, u2_.reset_password_code AS reset_password_code_135, u2_.reset_password_datetime AS reset_password_datetime_136, u2_.user_nickname AS user_nickname_137, u2_.user_cover_image AS user_cover_image_138, u2_.raffalls_ended_tickets_count AS raffalls_ended_tickets_count_139, u2_.score AS score_140, u2_.subscribed AS subscribed_141, u2_.is_deleted AS is_deleted_142, u2_.user_facebook AS user_facebook_143, u2_.user_instagram AS user_instagram_144, u2_.user_twitter AS user_twitter_145, u2_.user_youtube AS user_youtube_146, u2_.user_tiktok AS user_tiktok_147, u2_.user_linkedin AS user_linkedin_148, u2_.ryft_enabled AS ryft_enabled_149, u2_.ryft_customer_id AS ryft_customer_id_150, u2_.email_phone_verified AS email_phone_verified_151, u2_.account_settings_id AS account_settings_id_152, u2_.account_expiration_date AS account_expiration_date_153, u2_.stripe_customer_id AS stripe_customer_id_154, u2_.user_account_notified AS user_account_notified_155, u2_.user_language AS user_language_156, u2_.user_currency AS user_currency_157, u2_.account_type_restricted AS account_type_restricted_158, u2_.user_coins AS user_coins_159, u2_.is_superfans_enabled AS is_superfans_enabled_160 FROM raffalls r1_ LEFT JOIN raffall_categories r3_ ON r1_.raffall_category_id = r3_.category_id LEFT JOIN raffall_tickets r0_ ON r1_.raffall_id = r0_.raffall_id INNER JOIN users u2_ ON r1_.user_id = u2_.user_id WHERE r1_.raffall_reported = 0 AND r1_.raffall_published = 1 AND r1_.raffall_is_free_entry = 0 AND r1_.raffall_publish_type = 1 AND r1_.rafall_finished IN (0) AND r1_.draw_status IN (0) AND (r1_.raffall_tickets_count >= 200 OR (r1_.raffall_tickets_count = -1 OR r1_.raffall_tickets_count = 1000000000)) GROUP BY r1_.raffall_id ORDER BY r1_.raffall_end_date DESC) dctrn_table\G
+
+# Query 6: 0.02 QPS, 0.49x concurrency, ID 0x5C20FD3CE117841217C064A516E2B6B5 at byte 44873
+# Scores: V/M = 0.00
+# Time range: 2025-06-27T12:54:18 to 2025-06-27T12:55:48
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          4       2
+# Exec time      4     44s     22s     22s     22s     22s   160ms     22s
+# Lock time      5     4us     2us     2us     2us     2us       0     2us
+# Rows sent      0      20      10      10      10      10       0      10
+# Rows examine   0      20      10      10      10      10       0      10
+# Query size    42  16.27k   8.13k   8.13k   8.13k   8.13k       0   8.13k
+# String:
+# Databases    raffall
+# Hosts        172.40.126.150 (1/50%), 172.40.142.220 (1/50%)
+# Users        app_ro
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s
+#  10s+  ################################################################
+# Tables
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffalls'\G
+#    SHOW CREATE TABLE `raffall`.`raffalls`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_categories'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_categories`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'raffall_tickets'\G
+#    SHOW CREATE TABLE `raffall`.`raffall_tickets`\G
+#    SHOW TABLE STATUS FROM `raffall` LIKE 'users'\G
+#    SHOW CREATE TABLE `raffall`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT DISTINCT raffall_id_1 FROM (SELECT DISTINCT raffall_id_1, raffall_end_date_8 FROM (SELECT COUNT(r0_.raffall_ticket_id) * r1_.raffall_ticket_price AS sclr_0, r1_.raffall_id AS raffall_id_1, r1_.raffall_title AS raffall_title_2, r1_.raffall_description AS raffall_description_3, r1_.raffall_country AS raffall_country_4, r1_.raffall_accepted_by_winner AS raffall_accepted_by_winner_5, r1_.raffall_tickets_count AS raffall_tickets_count_6, r1_.raffall_ticket_price AS raffall_ticket_price_7, r1_.raffall_end_date AS raffall_end_date_8, r1_.raffall_timezone AS raffall_timezone_9, r1_.raffall_created AS raffall_created_10, r1_.raffall_updated AS raffall_updated_11, r1_.rafall_finished AS rafall_finished_12, r1_.collection AS collection_13, r1_.collection_postcode AS collection_postcode_14, r1_.raffall_published AS raffall_published_15, r1_.published_datetime AS published_datetime_16, r1_.raffall_autorelist AS raffall_autorelist_17, r1_.raffall_ends_all_sold AS raffall_ends_all_sold_18, r1_.raffall_is_bonus AS raffall_is_bonus_19, r1_.raffall_bonus_amount AS raffall_bonus_amount_20, r1_.charity_percentage AS charity_percentage_21, r1_.email_personal_message AS email_personal_message_22, r1_.charity_debit AS charity_debit_23, r1_.game_type AS game_type_24, r1_.raffall_is_free_entry AS raffall_is_free_entry_25, r1_.expires_in AS expires_in_26, r1_.first_prize_amount AS first_prize_amount_27, r1_.first_prize_winners AS first_prize_winners_28, r1_.second_prize_amount AS second_prize_amount_29, r1_.second_prize_winners AS second_prize_winners_30, r1_.third_prize_amount AS third_prize_amount_31, r1_.third_prize_winners AS third_prize_winners_32, r1_.topic_arn AS topic_arn_33, r1_.raffall_publish_type AS raffall_publish_type_34, r1_.mailchimp_list AS mailchimp_list_35, r1_.raffall_collection AS raffall_collection_36, r1_.raffall_prize_type AS raffall_prize_type_37, r1_.raffall_video_path AS raffall_video_path_38, r1_.raffall_promo_image AS raffall_promo_image_39, r1_.is_event AS is_event_40, r1_.featured_end_datetime AS featured_end_datetime_41, r1_.raffall_reported AS raffall_reported_42, r1_.raffall_url AS raffall_url_43, r1_.hoster_username AS hoster_username_44, r1_.revoke_date AS revoke_date_45, r1_.revoke_reason AS revoke_reason_46, r1_.draw_status AS draw_status_47, r1_.draw_datetime AS draw_datetime_48, r1_.mailgun_list AS mailgun_list_49, r1_.fraud_status AS fraud_status_50, r1_.is_affiliate AS is_affiliate_51, r1_.commission_rate AS commission_rate_52, r1_.raffall_status AS raffall_status_53, r1_.is_enable_specific_affiliate_partner AS is_enable_specific_affiliate_partner_54, r1_.raffall_title_sanitized AS raffall_title_sanitized_55, r1_.raffall_description_sanitized AS raffall_description_sanitized_56, r1_.minimum_tickets AS minimum_tickets_57, r1_.notification_before_draw_sent AS notification_before_draw_sent_58, r1_.raffall_start_date AS raffall_start_date_59, r1_.language AS language_60, r1_.other_languages AS other_languages_61, r1_.has_payment AS has_payment_62, r1_.winner_prize_type AS winner_prize_type_63, r1_.winner_prize_reason AS winner_prize_reason_64, r1_.raffall_host_prize_select_date AS raffall_host_prize_select_date_65, r0_.raffall_ticket_id AS raffall_ticket_id_66, r0_.raffall_ticket_title AS raffall_ticket_title_67, r0_.raffall_ticket_is_winner AS raffall_ticket_is_winner_68, r0_.raffall_ticket_is_failed AS raffall_ticket_is_failed_69, r0_.raffall_ticket_is_returned AS raffall_ticket_is_returned_70, r0_.raffall_ticket_is_accepted AS raffall_ticket_is_accepted_71, r0_.raffall_win_balance_type AS raffall_win_balance_type_72, r0_.raffall_ticket_date AS raffall_ticket_date_73, r0_.raffall_ticket_share_via AS raffall_ticket_share_via_74, r0_.raffall_ticket_amount AS raffall_ticket_amount_75, r0_.raffall_ticket_price AS raffall_ticket_price_76, r0_.raffall_ticket_win_place AS raffall_ticket_win_place_77, r0_.raffall_ticket_is_offerwall AS raffall_ticket_is_offerwall_78, r0_.raffall_ticket_dispute_date AS raffall_ticket_dispute_date_79, r0_.raffall_ticket_confirm_dispute_date AS raffall_ticket_confirm_dispute_date_80, r0_.raffall_ticket_reset_to_pending_date AS raffall_ticket_reset_to_pending_date_81, r0_.is_hidden AS is_hidden_82, r0_.preroll_winner AS preroll_winner_83, r0_.ticket_type AS ticket_type_84, r0_.affiliate_ticket_purchased_id AS affiliate_ticket_purchased_id_85, u2_.user_id AS user_id_86, u2_.user_email AS user_email_87, u2_.user_new_email AS user_new_email_88, u2_.user_password AS user_password_89, u2_.user_name AS user_name_90, u2_.user_avatar AS user_avatar_91, u2_.user_facebook_id AS user_facebook_id_92, u2_.user_wallet AS user_wallet_93, u2_.user_winnings AS user_winnings_94, u2_.user_winnings_pending AS user_winnings_pending_95, u2_.user_winnings_request AS user_winnings_request_96, u2_.user_email_verified AS user_email_verified_97, u2_.user_created AS user_created_98, u2_.user_updated AS user_updated_99, u2_.is_admin AS is_admin_100, u2_.is_hoster AS is_hoster_101, u2_.user_password_recovered AS user_password_recovered_102, u2_.user_country AS user_country_103, u2_.user_city AS user_city_104, u2_.user_phone AS user_phone_105, u2_.average_rating AS average_rating_106, u2_.total_rating AS total_rating_107, u2_.rates AS rates_108, u2_.finished_raffalls AS finished_raffalls_109, u2_.last_bonus_share AS last_bonus_share_110, u2_.ref_code AS ref_code_111, u2_.refferal_user_id AS refferal_user_id_112, u2_.is_first_login AS is_first_login_113, u2_.refferal_bonuses AS refferal_bonuses_114, u2_.received_from_tapjoj AS received_from_tapjoj_115, u2_.ads_left AS ads_left_116, u2_.ad_last_viewed_date AS ad_last_viewed_date_117, u2_.user_fb_token AS user_fb_token_118, u2_.user_phone_verified AS user_phone_verified_119, u2_.refferal_bonuses_comission AS refferal_bonuses_comission_120, u2_.user_phone_country AS user_phone_country_121, u2_.user_hoster_verified AS user_hoster_verified_122, u2_.user_hoster_details AS user_hoster_details_123, u2_.user_hoster_website AS user_hoster_website_124, u2_.videoads_left AS videoads_left_125, u2_.videoad_last_viewed_date AS videoad_last_viewed_date_126, u2_.free_draw_ads AS free_draw_ads_127, u2_.free_draw_last_viewed_date AS free_draw_last_viewed_date_128, u2_.free_draw_offerwall_completed_date AS free_draw_offerwall_completed_date_129, u2_.raffalls_synced AS raffalls_synced_130, u2_.user_relogged AS user_relogged_131, u2_.refferal_type AS refferal_type_132, u2_.refferal_bonuses_free_draw AS refferal_bonuses_free_draw_133, u2_.last_payment_id AS last_payment_id_134, u2_.reset_password_code AS reset_password_code_135, u2_.reset_password_datetime AS reset_password_datetime_136, u2_.user_nickname AS user_nickname_137, u2_.user_cover_image AS user_cover_image_138, u2_.raffalls_ended_tickets_count AS raffalls_ended_tickets_count_139, u2_.score AS score_140, u2_.subscribed AS subscribed_141, u2_.is_deleted AS is_deleted_142, u2_.user_facebook AS user_facebook_143, u2_.user_instagram AS user_instagram_144, u2_.user_twitter AS user_twitter_145, u2_.user_youtube AS user_youtube_146, u2_.user_tiktok AS user_tiktok_147, u2_.user_linkedin AS user_linkedin_148, u2_.ryft_enabled AS ryft_enabled_149, u2_.ryft_customer_id AS ryft_customer_id_150, u2_.email_phone_verified AS email_phone_verified_151, u2_.account_settings_id AS account_settings_id_152, u2_.account_expiration_date AS account_expiration_date_153, u2_.stripe_customer_id AS stripe_customer_id_154, u2_.user_account_notified AS user_account_notified_155, u2_.user_language AS user_language_156, u2_.user_currency AS user_currency_157, u2_.account_type_restricted AS account_type_restricted_158, u2_.user_coins AS user_coins_159, u2_.is_superfans_enabled AS is_superfans_enabled_160 FROM raffalls r1_ LEFT JOIN raffall_categories r3_ ON r1_.raffall_category_id = r3_.category_id LEFT JOIN raffall_tickets r0_ ON r1_.raffall_id = r0_.raffall_id INNER JOIN users u2_ ON r1_.user_id = u2_.user_id WHERE r1_.raffall_reported = 0 AND r1_.raffall_published = 1 AND r1_.raffall_is_free_entry = 0 AND r1_.raffall_publish_type = 1 AND r1_.rafall_finished IN (0) AND r1_.draw_status IN (0) AND (r1_.raffall_tickets_count >= 200 OR (r1_.raffall_tickets_count = -1 OR r1_.raffall_tickets_count = 1000000000)) GROUP BY r1_.raffall_id) dctrn_result_inner ORDER BY raffall_end_date_8 DESC) dctrn_result LIMIT 10\G

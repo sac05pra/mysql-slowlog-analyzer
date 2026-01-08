@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDS Slow Query Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- NEW: Add Prism.js CSS for code styling (okaidia theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2>RDS Slow Query Log Analyzer</h2>
+            </div>
+            <div class="card-body">
+                <!-- Form remains the same -->
+                <form id="analysis-form">
+                    <!-- ... content of the form ... -->
+                    <div class="mb-3">
+                        <label for="db-instances" class="form-label">Select DB Instance(s)</label>
+                        <select multiple class="form-control" id="db-instances" required size="8">
+                            {% for instance in db_instances %}
+                                <option value="{{ instance }}">{{ instance }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Hold Ctrl (or Cmd on Mac) to select multiple instances.</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="start-date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start-date" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="end-date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end-date" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="submit-btn" {% if not db_instances %}disabled{% endif %}>
+                        <span id="btn-text">Start Analysis</span>
+                        <div class="spinner-border spinner-border-sm d-none" id="btn-spinner" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Status container remains the same -->
+        <div id="status-container" class="mt-4 d-none">
+            <!-- ... content of the status container ... -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Analysis Progress</h5>
+                    <div class="progress mb-2" role="progressbar">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                    </div>
+                    <p id="status-message" class="text-muted mb-0">Starting...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODIFIED: Results container will now hold the actual reports -->
+        <div id="results-container" class="mt-4 d-none">
+            <!-- The JavaScript will insert report content here -->
+        </div>
+
+    </div>
+
+    <!-- NEW: Add Prism.js script at the end -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

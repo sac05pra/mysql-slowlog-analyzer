@@ -1,0 +1,50 @@
+/* static/style.css (Complete and Final with AI Code Block Fix) */
+
+body {
+    background-color: #f8f9fa;
+}
+
+/* === Rule for the Main Page's Report Box === */
+/* This is the original rule you liked. It works on the first page. */
+#results-container .card-body pre {
+    max-height: 70vh; /* 70% of the viewport's height */
+    overflow: auto;
+}
+
+
+/* === Rules for the Side-by-Side Analysis Page === */
+
+/* This rule targets BOTH the left and right scrolling boxes on your analysis.html page. */
+.analysis-view .card-body {
+    /* Set a maximum height. 75vh means 75% of the browser window's height.
+       This creates the "fixed box" effect. You can adjust this value. */
+    max-height: 75vh;
+    
+    /* Add a vertical scrollbar ONLY when the content inside is taller than the box. */
+    overflow-y: auto;
+}
+
+/* This is a small but important helper for the <pre> tag on the left side.
+   It prevents it from adding extra space that would break the layout. */
+.analysis-view .card-body pre {
+    margin: 0;
+}
+
+
+/* === NEW FIX: Style the Code Blocks in the AI Analysis Panel === */
+/* This rule targets only the code blocks inside the AI-generated report. */
+#ai-analysis-container pre {
+    background-color: #272822; /* A dark background, matching the okaidia theme */
+    color: #f8f8f2;            /* A light text color for readability on the dark background */
+    padding: 1em;              /* Add some nice spacing around the code */
+    border-radius: 0.375rem;     /* Match the rounded corners of Bootstrap cards */
+    overflow-x: auto;          /* Add a horizontal scrollbar if a line of code is very long */
+}
+
+/* This targets inline `code` tags in the AI report to give them a subtle background. */
+#ai-analysis-container p code, #ai-analysis-container li code {
+    background-color: #e9ecef; /* A light grey background */
+    padding: .2em .4em;
+    border-radius: .25rem;
+    color: #c7254e; /* A reddish color for contrast */
+}
